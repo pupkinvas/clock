@@ -11,6 +11,12 @@ if name == 'nt':
     ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED)
 
 
+cos_table12 = [cos(i * pi / 6) for i in range(12)]
+sin_table12 = [sin(i * pi / 6) for i in range(12)]
+cos_table60 = [cos(pi * (15 - i) / 30) for i in range(60)]
+sin_table60 = [sin(pi * (15 - i) / 30) for i in range(60)]
+
+
 def draw():
     (_, _, _, hr, mins, secs, _, _, _) = localtime()
     root.title(f"{hr: =2}:{mins:0=2}:{secs:0=2}")
@@ -28,36 +34,33 @@ def draw_dial(dial_radius, x_mid, y_mid):
     short_tick, long_tick = dial_radius // 18, dial_radius // 9
     for i, dial_line in enumerate(dial_lines):
         w.itemconfigure(dial_line, width=1 + dial_radius // 50)
-        phi = i * pi / 6
         tick_length = long_tick if i % 3 == 0 else short_tick
-        w.coords(dial_line, x_mid + (dial_radius - tick_length) * cos(phi), 
-                 y_mid + (dial_radius - tick_length) * sin(phi),
-                 x_mid + dial_radius * cos(phi), y_mid + dial_radius * sin(phi))
+        w.coords(dial_line, x_mid + (dial_radius - tick_length) * cos_table12[i], 
+                 y_mid + (dial_radius - tick_length) * sin_table12[i],
+                 x_mid + dial_radius * cos_table12[i], y_mid + dial_radius * sin_table12[i])
 
 
 def draw_sec_arrow(dial_radius, x_mid, y_mid, secs):
     w.itemconfigure(secs_arrow, width=1 + dial_radius // 100)
-    phi_secs = pi * (15 - secs) / 30
     arrow_lenght = .9 * dial_radius
     w.coords(secs_arrow, x_mid, y_mid, 
-             x_mid + arrow_lenght * cos(phi_secs), y_mid - arrow_lenght * sin(phi_secs))
+             x_mid + arrow_lenght * cos_table60[secs], y_mid - arrow_lenght * sin_table60[secs])
 
 
 def draw_min_arrow(dial_radius, x_mid, y_mid, mins):
     w.itemconfigure(mins_arrow, width=1 + dial_radius // 60)
-    phi_mins = pi * (15 - mins) / 30
     arrow_lenght = 2 / 3 * dial_radius
     w.coords(mins_arrow, x_mid, y_mid, 
-             x_mid + arrow_lenght * cos(phi_mins), y_mid - arrow_lenght * sin(phi_mins))
+             x_mid + arrow_lenght * cos_table60[mins], y_mid - arrow_lenght * sin_table60[mins])
 
 
 def draw_hr_arrow(dial_radius, x_mid, y_mid, hr, mins):
     hr %= 12
     w.itemconfigure(hr_arrow, width=1 + dial_radius // 30)
-    phi_hr = pi * (3 - hr - mins / 60) / 6
+    i = 5 * hr + mins // 12
     arrow_lenght = 1 / 3 * dial_radius
     w.coords(hr_arrow, x_mid, y_mid, 
-             x_mid + arrow_lenght * cos(phi_hr), y_mid - arrow_lenght * sin(phi_hr))
+             x_mid + arrow_lenght * cos_table60[i], y_mid - arrow_lenght * sin_table60[i])
 
 
 root = tk.Tk()
