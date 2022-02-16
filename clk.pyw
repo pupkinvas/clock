@@ -46,24 +46,24 @@ def draw_dial():
 
 def draw_sec_arrow():
     w.itemconfigure(secs_arrow, width=1 + dial_radius // 100)
-    arrow_lenght = .9 * dial_radius
+    arrow_length = .9 * dial_radius
     w.coords(secs_arrow, x_mid, y_mid, 
-             x_mid + arrow_lenght * cos_table60[secs], y_mid - arrow_lenght * sin_table60[secs])
+             x_mid + arrow_length * cos_table60[secs], y_mid - arrow_length * sin_table60[secs])
 
 
 def draw_min_arrow():
     w.itemconfigure(mins_arrow, width=1 + dial_radius // 60)
-    arrow_lenght = 2 / 3 * dial_radius
+    arrow_length = 2 / 3 * dial_radius
     w.coords(mins_arrow, x_mid, y_mid, 
-             x_mid + arrow_lenght * cos_table60[mins], y_mid - arrow_lenght * sin_table60[mins])
+             x_mid + arrow_length * cos_table60[mins], y_mid - arrow_length * sin_table60[mins])
 
 
 def draw_hr_arrow():
     w.itemconfigure(hr_arrow, width=1 + dial_radius // 30)
     i = 5 * hr + mins // 12
-    arrow_lenght = 1 / 3 * dial_radius
+    arrow_length = 1 / 3 * dial_radius
     w.coords(hr_arrow, x_mid, y_mid, 
-             x_mid + arrow_lenght * cos_table60[i], y_mid - arrow_lenght * sin_table60[i])
+             x_mid + arrow_length * cos_table60[i], y_mid - arrow_length * sin_table60[i])
 
 
 root = tk.Tk()
