@@ -16,21 +16,25 @@ sin_table12 = [sin(i * pi / 6) for i in range(12)]
 cos_table60 = [cos(pi * (15 - i) / 30) for i in range(60)]
 sin_table60 = [sin(pi * (15 - i) / 30) for i in range(60)]
 
+hr = mins = secs = y_mid = x_mid = dial_radius = 0
+
 
 def draw():
+    global hr, mins, secs, y_mid, x_mid, dial_radius
     (_, _, _, hr, mins, secs, _, _, _) = localtime()
     root.title(f"{hr: =2}:{mins:0=2}:{secs:0=2}")
+    hr %= 12
     y_mid = w.winfo_height() // 2
     x_mid = w.winfo_width() // 2
     dial_radius = min(x_mid, y_mid)
-    draw_dial(dial_radius, x_mid, y_mid)
-    draw_sec_arrow(dial_radius, x_mid, y_mid, secs)
-    draw_min_arrow(dial_radius, x_mid, y_mid, mins)
-    draw_hr_arrow(dial_radius, x_mid, y_mid, hr, mins)
+    draw_dial()
+    draw_sec_arrow()
+    draw_min_arrow()
+    draw_hr_arrow()
     w.after(200, draw)
 
 
-def draw_dial(dial_radius, x_mid, y_mid):
+def draw_dial():
     short_tick, long_tick = dial_radius // 18, dial_radius // 9
     for i, dial_line in enumerate(dial_lines):
         w.itemconfigure(dial_line, width=1 + dial_radius // 50)
@@ -40,22 +44,21 @@ def draw_dial(dial_radius, x_mid, y_mid):
                  x_mid + dial_radius * cos_table12[i], y_mid + dial_radius * sin_table12[i])
 
 
-def draw_sec_arrow(dial_radius, x_mid, y_mid, secs):
+def draw_sec_arrow():
     w.itemconfigure(secs_arrow, width=1 + dial_radius // 100)
     arrow_lenght = .9 * dial_radius
     w.coords(secs_arrow, x_mid, y_mid, 
              x_mid + arrow_lenght * cos_table60[secs], y_mid - arrow_lenght * sin_table60[secs])
 
 
-def draw_min_arrow(dial_radius, x_mid, y_mid, mins):
+def draw_min_arrow():
     w.itemconfigure(mins_arrow, width=1 + dial_radius // 60)
     arrow_lenght = 2 / 3 * dial_radius
     w.coords(mins_arrow, x_mid, y_mid, 
              x_mid + arrow_lenght * cos_table60[mins], y_mid - arrow_lenght * sin_table60[mins])
 
 
-def draw_hr_arrow(dial_radius, x_mid, y_mid, hr, mins):
-    hr %= 12
+def draw_hr_arrow():
     w.itemconfigure(hr_arrow, width=1 + dial_radius // 30)
     i = 5 * hr + mins // 12
     arrow_lenght = 1 / 3 * dial_radius
