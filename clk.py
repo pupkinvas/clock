@@ -1,14 +1,7 @@
 ﻿import tkinter as tk
 from time import localtime
 from math import sin, cos, pi
-
 from os import name
-if name == 'nt':
-    import ctypes
-    ES_CONTINUOUS       = 0x80000000
-    ES_SYSTEM_REQUIRED  = 0x00000001
-    ES_DISPLAY_REQUIRED = 0x00000002
-    ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED)
 
 
 cos_table12 = [cos(i * pi / 6) for i in range(12)]
@@ -68,7 +61,13 @@ def draw_hr_arrow():
 
 root = tk.Tk()
 w = tk.Canvas(root)
-root.state("zoomed")
+if name == 'nt':
+    import ctypes
+    ES_CONTINUOUS       = 0x80000000
+    ES_SYSTEM_REQUIRED  = 0x00000001
+    ES_DISPLAY_REQUIRED = 0x00000002
+    ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED)
+    root.state("zoomed")
 root.rowconfigure(0, weight=1)
 root.columnconfigure(0, weight=1)
 w.grid(row=0, column=0, sticky=tk.N + tk.W + tk.E + tk.S)
