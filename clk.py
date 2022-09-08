@@ -1,4 +1,6 @@
-﻿import tkinter as tk
+﻿#! /usr/bin/env python3
+
+import tkinter as tk
 from time import localtime
 from math import sin, cos, pi
 from os import name
